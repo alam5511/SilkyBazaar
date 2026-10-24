@@ -164,14 +164,31 @@
             display: block;
         }
 
-        /* Carousel Navigation Arrows */
-        .carousel-arrow {
+        /* Slide Counter Badge (Top Right Corner) */
+        .slide-counter {
             position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fcf6ba;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            z-index: 20;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Fullscreen Zoom Button (Top Left Corner) */
+        .fullscreen-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fcf6ba;
+            border: 1px solid rgba(212, 175, 55, 0.4);
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -181,13 +198,11 @@
             font-size: 12px;
             cursor: pointer;
             z-index: 20;
+            backdrop-filter: blur(4px);
             transition: background 0.2s;
         }
 
-        .carousel-arrow.prev { left: 10px; }
-        .carousel-arrow.next { right: 10px; }
-
-        .carousel-arrow:hover {
+        .fullscreen-btn:hover {
             background: rgba(212, 175, 55, 0.8);
             color: #000;
         }
@@ -488,16 +503,19 @@
                 mediaList.forEach((mediaSrc, mediaIdx) => {
                     const isVideo = mediaSrc.toLowerCase().includes('.mp4');
                     const activeClass = mediaIdx === 0 ? "active" : "";
+                    
+                    // Clicking the slide advances to next image if multiple images exist
+                    const clickAction = mediaList.length > 1 ? `changeSlide(${cardIdx}, 1, ${mediaList.length})` : `openFullscreen('${isVideo ? 'video' : 'image'}', '${mediaSrc}', '${product.name}')`;
 
                     if (isVideo) {
                         slidesHTML += `
-                            <div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="openFullscreen('video', '${mediaSrc}', '${product.name}')">
+                            <div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="${clickAction}">
                                 <video src="${mediaSrc}" autoplay loop muted playsinline></video>
                             </div>
                         `;
                     } else {
                         slidesHTML += `
-                            <div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="openFullscreen('image', '${mediaSrc}', '${product.name}')">
+                            <div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="${clickAction}">
                                 <img src="${mediaSrc}" alt="${product.name}">
                             </div>
                         `;
@@ -506,22 +524,33 @@
                     dotsHTML += `<div class="dot ${activeClass}" id="dot-${cardIdx}-${mediaIdx}"></div>`;
                 });
 
-                let arrowsHTML = "";
+                let counterHTML = "";
+                let expandBtnHTML = "";
                 let dotsContainerHTML = "";
 
                 if (mediaList.length > 1) {
-                    arrowsHTML = `
-                        <div class="carousel-arrow prev" onclick="changeSlide(${cardIdx}, -1, ${mediaList.length})"><i class="fa-solid fa-chevron-left"></i></div>
-                        <div class="carousel-arrow next" onclick="changeSlide(${cardIdx}, 1, ${mediaList.length})"><i class="fa-solid fa-chevron-right"></i></div>
+                    counterHTML = `<div class="slide-counter" id="counter-${cardIdx}">1 / ${mediaList.length}</div>`;
+                    expandBtnHTML = `
+                        <div class="fullscreen-btn" title="Full View" onclick="event.stopPropagation(); openFullscreenFromActive(${cardIdx}, '${product.name}')">
+                            <i class="fa-solid fa-expand"></i>
+                        </div>
                     `;
                     dotsContainerHTML = `<div class="carousel-dots">${dotsHTML}</div>`;
+                } else {
+                    const isVideo = mediaList[0].toLowerCase().includes('.mp4');
+                    expandBtnHTML = `
+                        <div class="fullscreen-btn" title="Full View" onclick="event.stopPropagation(); openFullscreen('${isVideo ? 'video' : 'image'}', '${mediaList[0]}', '${product.name}')">
+                            <i class="fa-solid fa-expand"></i>
+                        </div>
+                    `;
                 }
 
                 const productCard = `
                     <div class="reel-card">
                         <div class="media-box" data-current="0">
                             ${slidesHTML}
-                            ${arrowsHTML}
+                            ${expandBtnHTML}
+                            ${counterHTML}
                             ${dotsContainerHTML}
                         </div>
                         <div class="card-details">
@@ -564,6 +593,25 @@
             document.getElementById(`slide-${cardIdx}-${current}`).classList.add('active');
             if (document.getElementById(`dot-${cardIdx}-${current}`)) {
                 document.getElementById(`dot-${cardIdx}-${current}`).classList.add('active');
+            }
+
+            const counterEl = document.getElementById(`counter-${cardIdx}`);
+            if (counterEl) {
+                counterEl.innerText = `${current + 1} / ${totalSlides}`;
+            }
+        }
+
+        function openFullscreenFromActive(cardIdx, productName) {
+            const mediaBox = document.querySelectorAll('.media-box')[cardIdx];
+            const current = parseInt(mediaBox.getAttribute('data-current'));
+            const activeSlide = document.getElementById(`slide-${cardIdx}-${current}`);
+            const img = activeSlide.querySelector('img');
+            const video = activeSlide.querySelector('video');
+
+            if (video) {
+                openFullscreen('video', video.getAttribute('src'), productName);
+            } else if (img) {
+                openFullscreen('image', img.getAttribute('src'), productName);
             }
         }
 
