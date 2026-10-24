@@ -9,6 +9,10 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- PWA Web App Manifest (Embedded Data URI) -->
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,%7B%22name%22%3A%22Silky%20Bazaar%22%2C%22short_name%22%3A%22SilkyBazaar%22%2C%22start_url%22%3A%22%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23080808%22%2C%22theme_color%22%3A%22%23d4af37%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22https%3A%2F%2Ffiles.catbox.moe%2Fybgbzl.jpeg%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fjpeg%22%7D%5D%7D'>
+    <meta name="theme-color" content="#d4af37">
+
     <style>
         * {
             box-sizing: border-box;
@@ -23,7 +27,7 @@
             padding-bottom: 30px;
         }
 
-        /* Top User Navigation Bar (Freezed / Sticky) */
+        /* Top User Navigation Bar (Sticky / Freezed) */
         .top-user-bar {
             background: rgba(17, 17, 17, 0.98);
             padding: 10px 15px;
@@ -43,7 +47,7 @@
             color: #fcf6ba;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             font-weight: 500;
         }
 
@@ -55,33 +59,49 @@
             border: 1px solid #d4af37;
         }
 
+        .top-buttons-group {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
         .google-login-btn {
             background: #ffffff;
             color: #333;
             border: none;
-            padding: 6px 14px;
-            border-radius: 18px;
+            padding: 5px 10px;
+            border-radius: 15px;
             font-weight: 600;
-            font-size: 11px;
+            font-size: 10px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+            gap: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
             transition: all 0.2s ease;
         }
 
-        .google-login-btn:hover {
-            background: #f1f1f1;
-            transform: scale(1.02);
+        .install-app-btn {
+            background: linear-gradient(135deg, #d4af37, #aa771c);
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 10px;
+            cursor: pointer;
+            display: none; /* Shows up when install prompt is ready */
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
         }
 
         .logout-btn {
             background: rgba(212, 175, 55, 0.15);
             color: #fcf6ba;
             border: 1px solid #d4af37;
-            padding: 5px 12px;
-            border-radius: 14px;
+            padding: 4px 10px;
+            border-radius: 12px;
             font-size: 11px;
             font-weight: 600;
             cursor: pointer;
@@ -451,12 +471,15 @@
 </head>
 <body>
 
-    <!-- Top User Navigation Bar (Sticky / Freezed) -->
+    <!-- Top User Navigation Bar (Sticky & Freezed) -->
     <div class="top-user-bar">
         <div class="user-status" id="userStatusText">
             <i class="fa-regular fa-user"></i> Guest User
         </div>
-        <div id="authActionContainer">
+        <div class="top-buttons-group" id="authActionContainer">
+            <button class="install-app-btn" id="installAppBtn" onclick="installPWA()">
+                <i class="fa-solid fa-download"></i> Install App
+            </button>
             <button class="google-login-btn" onclick="loginWithGoogle()">
                 <i class="fa-brands fa-google" style="color: #ea4335;"></i> Sign In
             </button>
@@ -495,7 +518,7 @@
         <div class="footer-text">© Mubarakpur Silk Sarees & Suit Collection. All Rights Reserved.</div>
     </footer>
 
-    <!-- Firebase SDK Modular Import -->
+    <!-- Firebase SDK & PWA Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -517,9 +540,14 @@
         window.loginWithGoogle = function() {
             signInWithPopup(auth, provider)
                 .then((result) => {
-                    console.log("Logged in user: ", result.user);
+                    console.log("Logged in: ", result.user);
                 }).catch((error) => {
-                    alert("Login failed: " + error.message);
+                    console.error(error);
+                    if (error.code === 'auth/unauthorized-domain') {
+                        alert("Domain Error: Firebase Console me 'silkybazaar.in' ko Authorized Domain me add karein!");
+                    } else {
+                        alert("Login Error: " + error.message);
+                    }
                 });
         };
 
@@ -532,20 +560,46 @@
         onAuthStateChanged(auth, (user) => {
             const userStatusText = document.getElementById('userStatusText');
             const authActionContainer = document.getElementById('authActionContainer');
+            const installBtnHTML = `<button class="install-app-btn" id="installAppBtn" onclick="installPWA()" style="display:none;"><i class="fa-solid fa-download"></i> Install App</button>`;
 
             if (user) {
                 const photo = user.photoURL ? `<img src="${user.photoURL}" class="user-avatar">` : `<i class="fa-solid fa-user-check"></i>`;
                 userStatusText.innerHTML = `${photo} <span>${user.displayName || user.email}</span>`;
-                authActionContainer.innerHTML = `<button class="logout-btn" onclick="logoutUser()">Logout</button>`;
+                authActionContainer.innerHTML = installBtnHTML + `<button class="logout-btn" onclick="logoutUser()">Logout</button>`;
             } else {
                 userStatusText.innerHTML = `<i class="fa-regular fa-user"></i> Guest User`;
-                authActionContainer.innerHTML = `
+                authActionContainer.innerHTML = installBtnHTML + `
                     <button class="google-login-btn" onclick="loginWithGoogle()">
                         <i class="fa-brands fa-google" style="color: #ea4335;"></i> Sign In
                     </button>
                 `;
             }
+            if (deferredPrompt) {
+                document.getElementById('installAppBtn').style.display = 'flex';
+            }
         });
+
+        // PWA Install Prompt Logic
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            const installBtn = document.getElementById('installAppBtn');
+            if (installBtn) installBtn.style.display = 'flex';
+        });
+
+        window.installPWA = function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    document.getElementById('installAppBtn').style.display = 'none';
+                });
+            }
+        };
     </script>
 
     <script>
