@@ -1,1 +1,691 @@
-silkybazaar.in
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silky Bazaar - Pure Silk Sarees & Designer Suits</title>
+    <!-- Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #080808;
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+            padding-bottom: 30px;
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            padding: 22px 15px 18px 15px;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9);
+        }
+
+        .brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .brand-tagline {
+            font-size: 11px;
+            color: #d4af37;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .gold-divider {
+            height: 1px;
+            width: 80px;
+            background: linear-gradient(90deg, transparent, #d4af37, transparent);
+            margin: 8px auto;
+        }
+
+        .contact-info {
+            font-size: 11px;
+            color: #d1d1d1;
+            letter-spacing: 1px;
+            line-height: 1.6;
+        }
+
+        .contact-info i {
+            color: #d4af37;
+            margin-right: 4px;
+        }
+
+        .phone-link {
+            color: #fcf6ba;
+            text-decoration: none;
+        }
+
+        /* Search Section Styling */
+        .search-container {
+            max-width: 420px;
+            margin: 20px auto 0 auto;
+            padding: 0 12px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            background: rgba(26, 26, 26, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 25px;
+            padding: 12px 18px 12px 42px;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #fcf6ba;
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #d4af37;
+            font-size: 14px;
+        }
+
+        /* Single Column Layout */
+        .reel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+            max-width: 420px;
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .reel-card {
+            background: linear-gradient(145deg, #141414, #0d0d0d);
+            border-radius: 18px;
+            overflow: hidden;
+            width: 100%;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
+        }
+
+        /* 9:16 Media Carousel Container */
+        .media-box {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            overflow: hidden;
+            position: relative;
+            background-color: #1a1a1a;
+        }
+
+        .carousel-slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .carousel-slide.active {
+            display: block;
+        }
+
+        .carousel-slide img, .carousel-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Carousel Navigation Arrows */
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 20;
+            transition: background 0.2s;
+        }
+
+        .carousel-arrow.prev { left: 10px; }
+        .carousel-arrow.next { right: 10px; }
+
+        .carousel-arrow:hover {
+            background: rgba(212, 175, 55, 0.8);
+            color: #000;
+        }
+
+        /* Carousel Indicators Dots */
+        .carousel-dots {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            z-index: 20;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #d4af37;
+            width: 16px;
+            border-radius: 10px;
+        }
+
+        .card-details {
+            padding: 18px 15px;
+            text-align: center;
+            background: #121212;
+        }
+
+        .product-title {
+            font-family: 'Cinzel', serif;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: #fcf6ba;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .whatsapp-btn {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: #fff;
+            text-decoration: none;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .call-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            text-decoration: none;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Comment Section Box Styling */
+        .comment-section {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(212, 175, 55, 0.2);
+        }
+
+        .comment-input {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .comment-input::placeholder {
+            color: #888;
+        }
+
+        .comment-btn {
+            background: rgba(212, 175, 55, 0.15);
+            color: #fcf6ba;
+            border: 1px solid #d4af37;
+            padding: 8px 0;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* Fullscreen Image/Video Modal */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.96);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-wrapper {
+            position: relative;
+            max-width: 95%;
+            max-height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-wrapper img, .modal-wrapper video {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Modal Download Button (Top Right Corner) */
+        .modal-download-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(212, 175, 55, 0.9);
+            color: #000;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            text-decoration: none;
+            z-index: 2010;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+            border: 1px solid #fff;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .modal-download-btn:active {
+            transform: scale(0.9);
+            background: #fff;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 2001;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px 15px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            background: #0d0d0d;
+        }
+
+        .footer-brand {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            color: #d4af37;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        .footer-text {
+            font-size: 11px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="brand-name">Silky Bazaar</div>
+        <div class="brand-tagline">Pure Silk Sarees & Designer Suits</div>
+        <div class="gold-divider"></div>
+        <div class="contact-info">
+            <p><i class="fa-solid fa-location-dot"></i> Mubarakpur, Azamgarh, Uttar Pradesh, India - 276404</p>
+            <p><i class="fa-solid fa-phone"></i> Mobile: <a href="tel:+916392380133" class="phone-link">+91 6392380133</a></p>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <div class="search-container">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" class="search-box" placeholder="खोजें (जैसे: Kataan, Tissue, Handloom, Suit...)" onkeyup="filterProducts()">
+    </div>
+
+    <!-- Product Catalog -->
+    <div class="reel-container" id="catalog"></div>
+
+    <!-- Fullscreen Modal View -->
+    <div class="fullscreen-modal" id="mediaModal">
+        <span class="close-btn" onclick="closeFullscreen()">&times;</span>
+        <div class="modal-wrapper" id="modalContainer"></div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-brand">SILKY BAZAAR</div>
+        <div class="footer-text">© Mubarakpur Silk Sarees & Suit Collection. All Rights Reserved.</div>
+    </footer>
+
+    <script>
+        const phoneNumber = "916392380133";
+
+        const products = [
+            { 
+                name: "Saree Pure Kora Handloom (3 Photos)", 
+                src: [
+                    "https://files.catbox.moe/ybgbzl.jpeg",
+                    "https://files.catbox.moe/ad78dq.png",
+                    "https://files.catbox.moe/kmdkkp.jpeg"
+                ] 
+            },
+            { 
+                name: "Flat Saree Pure Kora Handloom-1001 (2 Photos)", 
+                src: [
+                    "https://files.catbox.moe/be9i6q.png",
+                    "https://files.catbox.moe/23ivqm.jpg"
+                ] 
+            },
+            { name: "Banarasi Pure Saree 01", src: "https://files.catbox.moe/zsv63n.jpeg" },
+            { name: "Pure Tissue Banarasi Saree Reel", src: "https://files.catbox.moe/qp3e7t.mp4" },
+            { name: "Saree Collection New Link 1", src: "https://files.catbox.moe/hy1e40.png" },
+            { name: "Saree Collection New Link 2", src: "https://files.catbox.moe/7v54gs.png" },
+            { name: "Saree Collection New Link 3", src: "https://files.catbox.moe/qilrdk.png" }
+        ];
+
+        const catalogContainer = document.getElementById("catalog");
+
+        function renderProducts(items) {
+            catalogContainer.innerHTML = "";
+
+            if (items.length === 0) {
+                catalogContainer.innerHTML = `<div class="no-results">कोई प्रोडक्ट नहीं मिला। कृपया दूसरा नाम सर्च करें।</div>`;
+                return;
+            }
+
+            items.forEach((product, cardIdx) => {
+                const mediaList = Array.isArray(product.src) ? product.src : [product.src];
+                const defaultMessage = `Hi Silky Bazaar, mujhe ye product order karna hai:\n\n*Product Name:* ${product.name}\n*Media Link:* ${mediaList[0]}`;
+                const defaultWhatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
+
+                let slidesHTML = "";
+                let dotsHTML = "";
+
+                mediaList.forEach((mediaSrc, mediaIdx) => {
+                    const isVideo = mediaSrc.toLowerCase().includes('.mp4');
+                    const activeClass = mediaIdx === 0 ? "active" : "";
+
+                    if (isVideo) {
+                        slidesHTML += `
+                            <div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="openFullscreen('video', '${mediaSrc}', '${product.name}')">
+                                <video src="${mediaSrc}" autoplay loop muted playsinline></video>
+                            </div>
+                        `;
+                    } else {
+                        slidesHTML += `
+                            <div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="openFullscreen('image', '${mediaSrc}', '${product.name}')">
+                                <img src="${mediaSrc}" alt="${product.name}">
+                            </div>
+                        `;
+                    }
+
+                    dotsHTML += `<div class="dot ${activeClass}" id="dot-${cardIdx}-${mediaIdx}"></div>`;
+                });
+
+                let arrowsHTML = "";
+                let dotsContainerHTML = "";
+
+                if (mediaList.length > 1) {
+                    arrowsHTML = `
+                        <div class="carousel-arrow prev" onclick="changeSlide(${cardIdx}, -1, ${mediaList.length})"><i class="fa-solid fa-chevron-left"></i></div>
+                        <div class="carousel-arrow next" onclick="changeSlide(${cardIdx}, 1, ${mediaList.length})"><i class="fa-solid fa-chevron-right"></i></div>
+                    `;
+                    dotsContainerHTML = `<div class="carousel-dots">${dotsHTML}</div>`;
+                }
+
+                const productCard = `
+                    <div class="reel-card">
+                        <div class="media-box" data-current="0">
+                            ${slidesHTML}
+                            ${arrowsHTML}
+                            ${dotsContainerHTML}
+                        </div>
+                        <div class="card-details">
+                            <div class="product-title">${product.name}</div>
+                            <div class="action-buttons">
+                                <a href="tel:+${phoneNumber}" class="call-btn">
+                                    <i class="fa-solid fa-phone"></i> Call
+                                </a>
+                                <a href="${defaultWhatsappLink}" target="_blank" class="whatsapp-btn">
+                                    <i class="fa-brands fa-whatsapp"></i> Direct Order
+                                </a>
+                            </div>
+                            <div class="comment-section">
+                                <input type="text" id="comment-${cardIdx}" class="comment-input" placeholder="कमेंट या सवाल लिखें (उदा: रेट, कलर...)" />
+                                <button onclick="sendCustomComment(${cardIdx}, '${product.name}', '${mediaList[0]}')" class="comment-btn">
+                                    <i class="fa-paper-plane"></i> Send
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                catalogContainer.innerHTML += productCard;
+            });
+        }
+
+        function changeSlide(cardIdx, direction, totalSlides) {
+            event.stopPropagation();
+            const mediaBox = document.querySelectorAll('.media-box')[cardIdx];
+            let current = parseInt(mediaBox.getAttribute('data-current'));
+
+            document.getElementById(`slide-${cardIdx}-${current}`).classList.remove('active');
+            if (document.getElementById(`dot-${cardIdx}-${current}`)) {
+                document.getElementById(`dot-${cardIdx}-${current}`).classList.remove('active');
+            }
+
+            current = (current + direction + totalSlides) % totalSlides;
+            mediaBox.setAttribute('data-current', current);
+
+            document.getElementById(`slide-${cardIdx}-${current}`).classList.add('active');
+            if (document.getElementById(`dot-${cardIdx}-${current}`)) {
+                document.getElementById(`dot-${cardIdx}-${current}`).classList.add('active');
+            }
+        }
+
+        function filterProducts() {
+            const query = document.getElementById("searchInput").value.toLowerCase().trim();
+            const filtered = products.filter(product => product.name.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        function sendCustomComment(index, name, mediaInfo) {
+            const commentBox = document.getElementById(`comment-${index}`);
+            const userComment = commentBox.value.trim();
+
+            let message = `Hi Silky Bazaar,\n\n*Product Name:* ${name}\n*Media Link:* ${mediaInfo}`;
+            
+            if (userComment !== "") {
+                message += `\n\n*मेरा सवाल/कमेंट:* ${userComment}`;
+            }
+
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function downloadWithWatermark(fileUrl, fileName, isVideo = false) {
+            if (isVideo) {
+                const a = document.createElement('a');
+                a.href = fileUrl;
+                a.download = (fileName || 'SilkyBazaar_Video') + '.mp4';
+                a.target = '_blank';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                return;
+            }
+
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = fileUrl;
+
+            img.onload = function () {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+
+                ctx.drawImage(img, 0, 0);
+
+                const watermarkText = "SILKY BAZAAR";
+                const baseScale = canvas.width / 420;
+                const fontSize = Math.round(20 * baseScale); 
+
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(-25 * Math.PI / 180);
+
+                ctx.font = `600 ${fontSize}px 'Cinzel', 'Georgia', serif`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+
+                ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
+                ctx.shadowBlur = Math.round(4 * baseScale);
+
+                ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
+                ctx.fillText(watermarkText, 0, 0);
+
+                ctx.restore();
+
+                canvas.toBlob(function(blob) {
+                    if (!blob) {
+                        window.open(fileUrl, '_blank');
+                        return;
+                    }
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = (fileName || 'SilkyBazaar_Saree') + '_Catalog.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    setTimeout(() => {
+                        URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                    }, 100);
+                }, 'image/png');
+            };
+
+            img.onerror = function () {
+                window.open(fileUrl, '_blank');
+            };
+        }
+
+        function openFullscreen(type, mediaSrc, mediaTitle) {
+            const modal = document.getElementById("mediaModal");
+            const container = document.getElementById("modalContainer");
+
+            if(type === 'video') {
+                container.innerHTML = `
+                    <div class="modal-download-btn" title="Download Video" onclick="downloadWithWatermark('${mediaSrc}', '${mediaTitle}', true)">
+                        <i class="fa-solid fa-download"></i>
+                    </div>
+                    <video src="${mediaSrc}" controls autoplay style="max-width:100%; max-height:90vh; border-radius:8px;"></video>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div class="modal-download-btn" title="Download Image with Watermark" onclick="downloadWithWatermark('${mediaSrc}', '${mediaTitle}', false)">
+                        <i class="fa-solid fa-download"></i>
+                    </div>
+                    <img src="${mediaSrc}" alt="Full View">
+                `;
+            }
+
+            modal.style.display = "flex";
+        }
+
+        function closeFullscreen() {
+            const modal = document.getElementById("mediaModal");
+            const container = document.getElementById("modalContainer");
+            modal.style.display = "none";
+            container.innerHTML = "";
+        }
+
+        renderProducts(products);
+    </script>
+
+</body>
+</html>
