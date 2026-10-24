@@ -61,7 +61,7 @@
 
         .top-buttons-group {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
         }
 
@@ -69,10 +69,10 @@
             background: #ffffff;
             color: #333;
             border: none;
-            padding: 5px 10px;
+            padding: 5px 12px;
             border-radius: 15px;
             font-weight: 600;
-            font-size: 10px;
+            font-size: 11px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -85,10 +85,10 @@
             background: linear-gradient(135deg, #d4af37, #aa771c);
             color: #000;
             border: none;
-            padding: 5px 10px;
+            padding: 5px 12px;
             border-radius: 15px;
             font-weight: 700;
-            font-size: 10px;
+            font-size: 11px;
             cursor: pointer;
             display: none; /* Shows up when install prompt is ready */
             align-items: center;
@@ -575,7 +575,8 @@
                 `;
             }
             if (deferredPrompt) {
-                document.getElementById('installAppBtn').style.display = 'flex';
+                const btn = document.getElementById('installAppBtn');
+                if (btn) btn.style.display = 'flex';
             }
         });
 
@@ -596,7 +597,8 @@
                         console.log('User accepted the install prompt');
                     }
                     deferredPrompt = null;
-                    document.getElementById('installAppBtn').style.display = 'none';
+                    const btn = document.getElementById('installAppBtn');
+                    if (btn) btn.style.display = 'none';
                 });
             }
         };
