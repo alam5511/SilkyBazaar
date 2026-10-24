@@ -23,16 +23,13 @@
             padding-bottom: 30px;
         }
 
-        /* Header Styling */
+        /* Header Styling (Unfreezed / Normal Scroll) */
         header {
             text-align: center;
             padding: 22px 15px 18px 15px;
             background: rgba(18, 18, 18, 0.95);
-            backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: relative;
             box-shadow: 0 4px 25px rgba(0, 0, 0, 0.9);
         }
 
@@ -162,6 +159,24 @@
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+
+        /* On-Screen Watermark Overlay */
+        .display-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-25deg);
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.28);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+            pointer-events: none;
+            z-index: 15;
+            white-space: nowrap;
+            letter-spacing: 3px;
+            user-select: none;
         }
 
         /* Slide Counter Badge (Top Right Corner) */
@@ -504,7 +519,6 @@
                     const isVideo = mediaSrc.toLowerCase().includes('.mp4');
                     const activeClass = mediaIdx === 0 ? "active" : "";
                     
-                    // Clicking the slide advances to next image if multiple images exist
                     const clickAction = mediaList.length > 1 ? `changeSlide(${cardIdx}, 1, ${mediaList.length})` : `openFullscreen('${isVideo ? 'video' : 'image'}', '${mediaSrc}', '${product.name}')`;
 
                     if (isVideo) {
@@ -549,6 +563,7 @@
                     <div class="reel-card">
                         <div class="media-box" data-current="0">
                             ${slidesHTML}
+                            <div class="display-watermark">SILKY BAZAAR</div>
                             ${expandBtnHTML}
                             ${counterHTML}
                             ${dotsContainerHTML}
