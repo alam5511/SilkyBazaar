@@ -18,6 +18,11 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
         body {
@@ -27,7 +32,7 @@
             padding-bottom: 30px;
         }
 
-        /* Top User Navigation Bar (Sticky / Freezed) */
+        /* Top User Navigation Bar (Sticky & Freezed) */
         .top-user-bar {
             background: rgba(17, 17, 17, 0.98);
             padding: 10px 15px;
@@ -90,7 +95,7 @@
             font-weight: 700;
             font-size: 11px;
             cursor: pointer;
-            display: none; /* Shows up when install prompt is ready */
+            display: none;
             align-items: center;
             gap: 4px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.4);
@@ -242,6 +247,7 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            pointer-events: none;
         }
 
         .display-watermark {
@@ -435,6 +441,7 @@
             max-height: 90vh;
             object-fit: contain;
             border-radius: 8px;
+            pointer-events: none;
         }
 
         .close-btn {
@@ -469,7 +476,7 @@
         }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
     <!-- Top User Navigation Bar (Sticky & Freezed) -->
     <div class="top-user-bar">
@@ -517,6 +524,38 @@
         <div class="footer-brand">SILKY BAZAAR</div>
         <div class="footer-text">© Mubarakpur Silk Sarees & Suit Collection. All Rights Reserved.</div>
     </footer>
+
+    <!-- Anti-Screenshot, Multi-Touch & Security Script -->
+    <script>
+        // Disable Right-Click
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // Disable Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (
+                e.key === 'PrintScreen' || 
+                (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'p' || e.key === 'c')) ||
+                e.key === 'F12'
+            ) {
+                e.preventDefault();
+                alert("Security Alert: Screenshots and copying are disabled on Silky Bazaar.");
+                return false;
+            }
+        });
+
+        // Allow 2 Fingers (Zoom), Block 3 and 4 Fingers (Gestures/Screenshots)
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length >= 3) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            if (e.touches.length >= 3) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+    </script>
 
     <!-- Firebase SDK & PWA Script -->
     <script type="module">
@@ -745,7 +784,7 @@
         function sendCustomComment(index, name, mediaInfo) {
             const commentBox = document.getElementById(`comment-${index}`);
             const userComment = commentBox.value.trim();
-            let message = `Hi Silky Bazaar,\n\n*Product Name:* ${name}\n*Media Link:* ${mediaInfo}`;
+            let message = `Hi Silky Bazaar, mujhe ye product order karna hai:\n\n*Product Name:* ${name}\n*Media Link:* ${mediaInfo}`;
             if (userComment !== "") message += `\n\n*मेरा सवाल/कमेंट:* ${userComment}`;
             window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
