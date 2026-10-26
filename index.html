@@ -543,6 +543,15 @@
             }
         });
 
+        // Hide screen content on visibility change / screenshot gesture switch
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.body.style.display = "none";
+            } else {
+                document.body.style.display = "block";
+            }
+        });
+
         // Allow 2 Fingers (Zoom), Block 3 and 4 Fingers (Gestures/Screenshots)
         document.addEventListener('touchstart', function(e) {
             if (e.touches.length >= 3) {
