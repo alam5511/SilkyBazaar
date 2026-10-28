@@ -23,7 +23,68 @@
             padding-bottom: 30px;
         }
 
-        /* Header Styling (Unfreezed / Normal Scroll) */
+        /* App Gate / Redirect Overlay (Jab browser se khulega) */
+        #browser-warning {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #080808;
+            z-index: 99999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .warning-box {
+            background: linear-gradient(145deg, #141414, #0d0d0d);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
+            padding: 30px 20px;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.9);
+        }
+
+        .warning-title {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            color: #fcf6ba;
+            margin-bottom: 12px;
+        }
+
+        .warning-desc {
+            font-size: 13px;
+            color: #d1d1d1;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .download-app-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #bf953f, #aa771c);
+            color: #000;
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .download-app-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Header Styling */
         header {
             text-align: center;
             padding: 22px 15px 18px 15px;
@@ -96,12 +157,6 @@
             font-size: 13px;
             outline: none;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .search-box:focus {
-            border-color: #fcf6ba;
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.5);
         }
 
         .search-icon {
@@ -133,7 +188,6 @@
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8);
         }
 
-        /* 9:16 Media Carousel Container */
         .media-box {
             width: 100%;
             aspect-ratio: 9 / 16;
@@ -161,7 +215,6 @@
             display: block;
         }
 
-        /* On-Screen Watermark Overlay */
         .display-watermark {
             position: absolute;
             top: 50%;
@@ -179,7 +232,6 @@
             user-select: none;
         }
 
-        /* Slide Counter Badge (Top Right Corner) */
         .slide-counter {
             position: absolute;
             top: 12px;
@@ -196,7 +248,6 @@
             backdrop-filter: blur(4px);
         }
 
-        /* Fullscreen Zoom Button (Top Left Corner) */
         .fullscreen-btn {
             position: absolute;
             top: 12px;
@@ -214,15 +265,8 @@
             cursor: pointer;
             z-index: 20;
             backdrop-filter: blur(4px);
-            transition: background 0.2s;
         }
 
-        .fullscreen-btn:hover {
-            background: rgba(212, 175, 55, 0.8);
-            color: #000;
-        }
-
-        /* Carousel Indicators Dots */
         .carousel-dots {
             position: absolute;
             bottom: 12px;
@@ -298,7 +342,6 @@
             font-size: 14px;
         }
 
-        /* Comment Section Box Styling */
         .comment-section {
             display: flex;
             flex-direction: column;
@@ -320,10 +363,6 @@
             outline: none;
         }
 
-        .comment-input::placeholder {
-            color: #888;
-        }
-
         .comment-btn {
             background: rgba(212, 175, 55, 0.15);
             color: #fcf6ba;
@@ -339,7 +378,7 @@
             gap: 6px;
         }
 
-        /* Fullscreen Image/Video Modal */
+        /* Fullscreen Modal View (Download Hata Diya Gaya Hai) */
         .fullscreen-modal {
             display: none;
             position: fixed;
@@ -367,34 +406,6 @@
             max-height: 90vh;
             object-fit: contain;
             border-radius: 8px;
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
-        }
-
-        /* Modal Download Button (Top Right Corner) */
-        .modal-download-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(212, 175, 55, 0.9);
-            color: #000;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 19px;
-            text-decoration: none;
-            z-index: 2010;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
-            border: 1px solid #fff;
-            cursor: pointer;
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .modal-download-btn:active {
-            transform: scale(0.9);
-            background: #fff;
         }
 
         .close-btn {
@@ -439,6 +450,20 @@
 </head>
 <body>
 
+    <!-- Browser Warning / App Redirect Screen -->
+    <div id="browser-warning">
+        <div class="warning-box">
+            <div class="warning-title">SILKY BAZAAR</div>
+            <div class="warning-desc">
+                सुरक्षा कारणों (Screenshots सुरक्षा) और बेहतरीन अनुभव के लिए यह कैटलॉग केवल हमारे आधिकारिक एंड्रॉइड ऐप में उपलब्ध है। कृपया ऐप डाउनलोड करें।
+            </div>
+            <!-- Yahan apna APK link daal sakte hain jaise Google Drive link ya GitHub release link -->
+            <a href="app-debug.apk" class="download-app-btn">
+                <i class="fa-solid fa-download"></i> Download Secure App
+            </a>
+        </div>
+    </div>
+
     <!-- Header Section -->
     <header>
         <div class="brand-name">Silky Bazaar</div>
@@ -472,6 +497,20 @@
     </footer>
 
     <script>
+        // Check agar user WebView App ke alawa kisi normal browser (Chrome/Safari) se khol raha hai
+        // Aapke Android Studio App mein agar userAgent change karna ho ya default bypass ke liye check:
+        // Yahan hum detect kar rahe hain ki agar app nahi hai toh warning dikhayein.
+        window.addEventListener('DOMContentLoaded', () => {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            // Agar aap chaho ki browser mein bilkul na khule toh niche condition enable kar sakte hain.
+            // Lekin agar aapko khud test karna hai toh filhal ise comment rakhein ya check karein:
+            
+            // Example check: agar standard mobile browser hai aur WebView sign nahi hai:
+            // if (!ua.includes("; wv") && !navigator.userAgent.includes("SilkyBazaar")) {
+            //     document.getElementById('browser-warning').style.display = 'flex';
+            // }
+        });
+
         const phoneNumber = "916392380133";
 
         const products = [
@@ -650,89 +689,17 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        function downloadWithWatermark(fileUrl, fileName, isVideo = false) {
-            if (isVideo) {
-                const a = document.createElement('a');
-                a.href = fileUrl;
-                a.download = (fileName || 'SilkyBazaar_Video') + '.mp4';
-                a.target = '_blank';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                return;
-            }
-
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.src = fileUrl;
-
-            img.onload = function () {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-
-                ctx.drawImage(img, 0, 0);
-
-                const watermarkText = "SILKY BAZAAR";
-                const baseScale = canvas.width / 420;
-                const fontSize = Math.round(20 * baseScale); 
-
-                ctx.save();
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.rotate(-25 * Math.PI / 180);
-
-                ctx.font = `600 ${fontSize}px 'Cinzel', 'Georgia', serif`;
-                ctx.textAlign = "center";
-                ctx.textBaseline = "middle";
-
-                ctx.shadowColor = "rgba(0, 0, 0, 0.6)";
-                ctx.shadowBlur = Math.round(4 * baseScale);
-
-                ctx.fillStyle = "rgba(255, 255, 255, 0.18)";
-                ctx.fillText(watermarkText, 0, 0);
-
-                ctx.restore();
-
-                canvas.toBlob(function(blob) {
-                    if (!blob) {
-                        window.open(fileUrl, '_blank');
-                        return;
-                    }
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = (fileName || 'SilkyBazaar_Saree') + '_Catalog.png';
-                    document.body.appendChild(a);
-                    a.click();
-                    setTimeout(() => {
-                        URL.revokeObjectURL(url);
-                        document.body.removeChild(a);
-                    }, 100);
-                }, 'image/png');
-            };
-
-            img.onerror = function () {
-                window.open(fileUrl, '_blank');
-            };
-        }
-
+        // Fullscreen view se download button puri tarah hata diya gaya hai
         function openFullscreen(type, mediaSrc, mediaTitle) {
             const modal = document.getElementById("mediaModal");
             const container = document.getElementById("modalContainer");
 
             if(type === 'video') {
                 container.innerHTML = `
-                    <div class="modal-download-btn" title="Download Video" onclick="downloadWithWatermark('${mediaSrc}', '${mediaTitle}', true)">
-                        <i class="fa-solid fa-download"></i>
-                    </div>
                     <video src="${mediaSrc}" controls autoplay style="max-width:100%; max-height:90vh; border-radius:8px;"></video>
                 `;
             } else {
                 container.innerHTML = `
-                    <div class="modal-download-btn" title="Download Image with Watermark" onclick="downloadWithWatermark('${mediaSrc}', '${mediaTitle}', false)">
-                        <i class="fa-solid fa-download"></i>
-                    </div>
                     <img src="${mediaSrc}" alt="Full View">
                 `;
             }
