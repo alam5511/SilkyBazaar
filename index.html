@@ -11,7 +11,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: #080808; font-family: 'Montserrat', sans-serif; color: #ffffff; padding-bottom: 30px; }
 
-        /* Admin Login Screen for Browser */
         #admin-login-overlay {
             display: none;
             position: fixed;
@@ -67,8 +66,8 @@
 
         .reel-container { display: flex; flex-direction: column; align-items: center; gap: 35px; max-width: 420px; margin: 25px auto; padding: 0 12px; }
         .reel-card { background: linear-gradient(145deg, #141414, #0d0d0d); border-radius: 18px; overflow: hidden; width: 100%; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8); }
-        .media-box { width: 100%; aspect-ratio: 9 / 16; overflow: hidden; position: relative; background-color: #1a1a1a; }
-        .carousel-slide { width: 100%; height: 100%; display: none; position: relative; cursor: pointer; }
+        .media-box { width: 100%; aspect-ratio: 9 / 16; overflow: hidden; position: relative; background-color: #1a1a1a; cursor: pointer; }
+        .carousel-slide { width: 100%; height: 100%; display: none; position: relative; }
         .carousel-slide.active { display: block; }
         .carousel-slide img, .carousel-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
         .display-watermark {
@@ -92,7 +91,6 @@
         .comment-input { width: 100%; background: #1a1a1a; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 6px; padding: 8px 12px; color: #fff; font-size: 12px; outline: none; }
         .comment-btn { background: rgba(212, 175, 55, 0.15); color: #fcf6ba; border: 1px solid #d4af37; padding: 8px 0; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-        /* Modal with 1-Click Download Button (Visible only in Browser for Admin) */
         .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.95); z-index: 99999; justify-content: center; align-items: center; }
         .modal-wrapper { position: relative; width: 90%; height: 90%; display: flex; justify-content: center; align-items: center; }
         .modal-wrapper img, .modal-wrapper video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
@@ -112,11 +110,10 @@
 </head>
 <body>
 
-    <!-- Admin Login Overlay for Browser Users -->
     <div id="admin-login-overlay">
         <div class="login-box">
             <div class="login-title">ADMIN ACCESS</div>
-            <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Welcome to Silky Barzaar :</p>
+            <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Welcome to Silky Bazaar :</p>
             <input type="password" id="adminPass" class="login-input" placeholder="Password daalein...">
             <button onclick="verifyAdmin()" class="login-btn">Login</button>
         </div>
@@ -150,10 +147,8 @@
     </footer>
 
     <script>
-        // Check if opened from Android App
         const isApp = navigator.userAgent.includes("SilkyBazaarApp");
 
-        // Agar browser se khola hai toh admin login check karo
         if (!isApp) {
             const isAdminLoggedIn = localStorage.getItem("silky_admin_logged");
             if (isAdminLoggedIn !== "true") {
@@ -163,7 +158,6 @@
 
         function verifyAdmin() {
             const pass = document.getElementById("adminPass").value;
-            // Yahan apna password set kar sakte hain (abhi 'admin123' rakha hai)
             if (pass === "Silky@#8528") {
                 localStorage.setItem("silky_admin_logged", "true");
                 document.getElementById("admin-login-overlay").style.display = "none";
@@ -176,10 +170,12 @@
 
         const products = [
             { 
-                name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/8wphsl.png", "https://files.catbox.moe/tocjbi.jpeg"
-] },
-                    
-            
+                name: "Saree Pure Kora Handloom (3 Photos)", 
+                src: [ 
+                    "https://files.catbox.moe/8wphsl.png", 
+                    "https://files.catbox.moe/tocjbi.jpeg"
+                ] 
+            },
             { 
                 name: "Flat Saree Pure Kora Handloom-1001 (2 Photos)", 
                 src: [
@@ -214,12 +210,11 @@
                 mediaList.forEach((mediaSrc, mediaIdx) => {
                     const isVideo = mediaSrc.toLowerCase().includes('.mp4');
                     const activeClass = mediaIdx === 0 ? "active" : "";
-                    const clickAction = `openFullscreen('${isVideo ? 'video' : 'image'}', '${mediaSrc}', '${product.name}')`;
 
                     if (isVideo) {
-                        slidesHTML += `<div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="${clickAction}"><video src="${mediaSrc}" autoplay loop muted playsinline></video></div>`;
+                        slidesHTML += `<div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}"><video src="${mediaSrc}" autoplay loop muted playsinline></video></div>`;
                     } else {
-                        slidesHTML += `<div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}" onclick="${clickAction}"><img src="${mediaSrc}" alt="${product.name}"></div>`;
+                        slidesHTML += `<div class="carousel-slide ${activeClass}" id="slide-${cardIdx}-${mediaIdx}"><img src="${mediaSrc}" alt="${product.name}"></div>`;
                     }
                     dotsHTML += `<div class="dot ${activeClass}" id="dot-${cardIdx}-${mediaIdx}"></div>`;
                 });
@@ -239,7 +234,7 @@
 
                 const productCard = `
                     <div class="reel-card">
-                        <div class="media-box" data-current="0">
+                        <div class="media-box" data-current="0" onclick="handleCardClick(${cardIdx}, ${mediaList.length}, '${product.name}')">
                             ${slidesHTML}
                             <div class="display-watermark">SILKY BAZAAR</div>
                             ${expandBtnHTML}
@@ -263,8 +258,20 @@
             });
         }
 
+        // Jab card par tap/click karenge toh agla slide aayega (Agar ek se zyada photos hain)
+        function handleCardClick(cardIdx, totalSlides, productName) {
+            if (totalSlides > 1) {
+                changeSlide(cardIdx, 1, totalSlides);
+            } else {
+                const mediaBox = document.querySelectorAll('.media-box')[cardIdx];
+                const img = mediaBox.querySelector('img');
+                const video = mediaBox.querySelector('video');
+                if (video) openFullscreen('video', video.getAttribute('src'), productName);
+                else if (img) openFullscreen('image', img.getAttribute('src'), productName);
+            }
+        }
+
         function changeSlide(cardIdx, direction, totalSlides) {
-            event.stopPropagation();
             const mediaBox = document.querySelectorAll('.media-box')[cardIdx];
             let current = parseInt(mediaBox.getAttribute('data-current'));
             document.getElementById(`slide-${cardIdx}-${current}`).classList.remove('active');
@@ -311,7 +318,6 @@
             const container = document.getElementById("modalContainer");
 
             let downloadButtonHTML = "";
-            // Agar browser se admin ne khola hai (App nahi hai), toh 1-click download button dikhega!
             if (!isApp) {
                 downloadButtonHTML = `
                     <a href="${mediaSrc}" download class="modal-download-btn" title="Gallery me Save karein" target="_blank">
