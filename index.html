@@ -317,7 +317,7 @@
             gap: 6px;
         }
 
-        /* Fixed Fullscreen Modal View (No Black Screen) */
+        /* Fixed Fullscreen Modal View */
         .fullscreen-modal {
             display: none;
             position: fixed;
@@ -583,7 +583,7 @@
             const img = activeSlide.querySelector('img');
             const video = activeSlide.querySelector('video');
 
-.           if (video) {
+            if (video) {
                 openFullscreen('video', video.getAttribute('src'), productName);
             } else if (img) {
                 openFullscreen('image', img.getAttribute('src'), productName);
