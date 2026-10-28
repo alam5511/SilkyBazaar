@@ -116,7 +116,7 @@
     <div id="admin-login-overlay">
         <div class="login-box">
             <div class="login-title">ADMIN ACCESS</div>
-            <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Yeh website sirf official app par chalती hai. Browser mein kholne ke liye admin password daalein:</p>
+            <p style="font-size:12px; color:#aaa; margin-bottom:15px;">Welcome to Silky Barzaar :</p>
             <input type="password" id="adminPass" class="login-input" placeholder="Password daalein...">
             <button onclick="verifyAdmin()" class="login-btn">Login</button>
         </div>
@@ -134,7 +134,7 @@
 
     <div class="search-container">
         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" id="searchInput" class="search-box" placeholder="खोजें (जैसे: Kataan, Tissue, Handloom, Suit...)" onkeyup="filterProducts()">
+        <input type="text" id="searchInput" class="search-box" placeholder="Find(Exmp: Kataan, Tissue, Handloom, Suit...)" onkeyup="filterProducts()">
     </div>
 
     <div class="reel-container" id="catalog"></div>
@@ -164,11 +164,11 @@
         function verifyAdmin() {
             const pass = document.getElementById("adminPass").value;
             // Yahan apna password set kar sakte hain (abhi 'admin123' rakha hai)
-            if (pass === "admin123") {
+            if (pass === "Silky@#8528") {
                 localStorage.setItem("silky_admin_logged", "true");
                 document.getElementById("admin-login-overlay").style.display = "none";
             } else {
-                alert("Galat password!");
+                alert("Wrong password!");
             }
         }
 
@@ -202,13 +202,13 @@
         function renderProducts(items) {
             catalogContainer.innerHTML = "";
             if (items.length === 0) {
-                catalogContainer.innerHTML = `<div class="no-results">कोई प्रोडक्ट नहीं मिला। कृपया दूसरा नाम सर्च करें।</div>`;
+                catalogContainer.innerHTML = `<div class="no-results"> This name does not match </div>`;
                 return;
             }
 
             items.forEach((product, cardIdx) => {
                 const mediaList = Array.isArray(product.src) ? product.src : [product.src];
-                const defaultMessage = `Hi Silky Bazaar, mujhe ye product order karna hai:\n\n*Product Name:* ${product.name}\n*Media Link:* ${mediaList[0]}`;
+                const defaultMessage = `Hi Silky Bazaar, order this product:\n\n*Product Name:* ${product.name}\n*Media Link:* ${mediaList[0]}`;
                 const defaultWhatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
 
                 let slidesHTML = "";
@@ -305,7 +305,7 @@
             const commentBox = document.getElementById(`comment-${index}`);
             const userComment = commentBox.value.trim();
             let message = `Hi Silky Bazaar,\n\n*Product Name:* ${name}\n*Media Link:* ${mediaInfo}`;
-            if (userComment !== "") message += `\n\n*मेरा सवाल/कमेंट:* ${userComment}`;
+            if (userComment !== "") message += `\n\n*Comment On this Product:* ${userComment}`;
             window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
