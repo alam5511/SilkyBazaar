@@ -170,15 +170,14 @@
         const websiteDomain = "https://silkybazaar.in";
 
         const products = [
-           { name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/1.png", "https://github.com/alam5511/SilkyBazaar/blob/main/1f.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/9.png", "https://github.com/alam5511/SilkyBazaar/blob/main/8.png", "https://github.com/alam5511/SilkyBazaar/blob/main/10.png" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/11.png", "https://github.com/alam5511/SilkyBazaar/blob/main/11f.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/2.png", "https://github.com/alam5511/SilkyBazaar/blob/main/3.png", "https://github.com/alam5511/SilkyBazaar/blob/main/4.png", "https://github.com/alam5511/SilkyBazaar/blob/main/5.png", "https://github.com/alam5511/SilkyBazaar/blob/main/2%2C3%2C4%2Cf2.jpeg", "https://github.com/alam5511/SilkyBazaar/blob/main/2%20%2C%203%20%2C%204%20%2C%205%20f.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/13.png", "https://github.com/alam5511/SilkyBazaar/blob/main/12.png", "https://github.com/alam5511/SilkyBazaar/blob/main/12%2013f.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/14.png", "https://github.com/alam5511/SilkyBazaar/blob/main/14%20f.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/6.png", "https://github.com/alam5511/SilkyBazaar/blob/main/6f.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://github.com/alam5511/SilkyBazaar/blob/main/7.png", "https://github.com/alam5511/SilkyBazaar/blob/main/7f.jpeg" ] },
-
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/1.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/1f.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/9.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/8.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/10.png" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/11.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/11f.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/2.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/3.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/4.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/5.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/2%2C3%2C4%2Cf2.jpeg", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/2%20%2C%203%20%2C%204%20%2C%205%20f.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/13.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/12.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/12%2013f.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/14.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/14%20f.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/6.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/6f.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/7.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/7f.jpeg" ] },
             { name: "Saree Collection New Link 1", src: "https://files.catbox.moe/hy1e40.png" },
             { name: "Saree Collection New Link 2", src: "https://files.catbox.moe/7v54gs.png" },
             { name: "Saree Collection New Link 3", src: "https://files.catbox.moe/qilrdk.png" }
@@ -196,7 +195,6 @@
             items.forEach((product, cardIdx) => {
                 const mediaList = Array.isArray(product.src) ? product.src : [product.src];
                 
-                // Direct Website Link in WhatsApp Message (Taaki app hi khule)
                 const defaultMessage = `Hi Silky Bazaar, I want to order this product:\n\n*Product Name:* ${product.name}\n*Catalog Link:* ${websiteDomain}`;
                 const defaultWhatsappLink = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(defaultMessage)}`;
 
