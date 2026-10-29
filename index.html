@@ -167,18 +167,17 @@
         }
 
         const phoneNumber = "916392380133";
+        const websiteDomain = "https://silkybazaar.in";
 
         const products = [
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/8wphsl.png", "https://files.catbox.moe/tocjbi.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/j350gi.png", "https://files.catbox.moe/toxffo.png", "https://files.catbox.moe/9zrfzs.jpeg", "https://files.catbox.moe/myq3g6.png", "https://files.catbox.moe/nn9n5g.png", "https://files.catbox.moe/v5kzt5.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/h9t83w.png", "https://files.catbox.moe/0rwv6q.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/dgny1f.png", "https://files.catbox.moe/cooc1b.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/8mvx3v.png", "https://files.catbox.moe/vhn46t.png", "https://files.catbox.moe/u874ch.png", "https://files.catbox.moe/62jrtr.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/cxjd9p.png", "https://files.catbox.moe/urxjp0.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/379t32.png", "https://files.catbox.moe/3nlaiw.png", "https://files.catbox.moe/0uyqjj.jpeg" ] },
-{ name: "Saree Pure Kora Handloom (3 Photos)",  src: [ "https://files.catbox.moe/y3w76c.png", "https://files.catbox.moe/9559jo.jpeg" ] },
-
-
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/8wphsl.png", "https://files.catbox.moe/tocjbi.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/j350gi.png", "https://files.catbox.moe/toxffo.png", "https://files.catbox.moe/9zrfzs.jpeg", "https://files.catbox.moe/myq3g6.png", "https://files.catbox.moe/nn9n5g.png", "https://files.catbox.moe/v5kzt5.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/h9t83w.png", "https://files.catbox.moe/0rwv6q.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/dgny1f.png", "https://files.catbox.moe/cooc1b.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/8mvx3v.png", "https://files.catbox.moe/vhn46t.png", "https://files.catbox.moe/u874ch.png", "https://files.catbox.moe/62jrtr.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/cxjd9p.png", "https://files.catbox.moe/urxjp0.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/379t32.png", "https://files.catbox.moe/3nlaiw.png", "https://files.catbox.moe/0uyqjj.jpeg" ] },
+            { name: "Saree Pure Kora Handloom (3 Photos)", src: [ "https://files.catbox.moe/y3w76c.png", "https://files.catbox.moe/9559jo.jpeg" ] },
             { name: "Saree Collection New Link 1", src: "https://files.catbox.moe/hy1e40.png" },
             { name: "Saree Collection New Link 2", src: "https://files.catbox.moe/7v54gs.png" },
             { name: "Saree Collection New Link 3", src: "https://files.catbox.moe/qilrdk.png" }
@@ -195,8 +194,10 @@
 
             items.forEach((product, cardIdx) => {
                 const mediaList = Array.isArray(product.src) ? product.src : [product.src];
-                const defaultMessage = `Hi Silky Bazaar, order this product:\n\n*Product Name:* ${product.name}\n*Media Link:* ${mediaList[0]}`;
-                const defaultWhatsappLink = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
+                
+                // Direct Website Link in WhatsApp Message (Taaki app hi khule)
+                const defaultMessage = `Hi Silky Bazaar, I want to order this product:\n\n*Product Name:* ${product.name}\n*Catalog Link:* ${websiteDomain}`;
+                const defaultWhatsappLink = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(defaultMessage)}`;
 
                 let slidesHTML = "";
                 let dotsHTML = "";
@@ -243,7 +244,7 @@
                             </div>
                             <div class="comment-section">
                                 <input type="text" id="comment-${cardIdx}" class="comment-input" placeholder="कमेंट या सवाल लिखें (उदा: रेट, कलर...)" />
-                                <button onclick="sendCustomComment(${cardIdx}, '${product.name}', '${mediaList[0]}')" class="comment-btn"><i class="fa-paper-plane"></i> Send</button>
+                                <button onclick="sendCustomComment(${cardIdx}, '${product.name}')" class="comment-btn"><i class="fa-paper-plane"></i> Send</button>
                             </div>
                         </div>
                     </div>
@@ -252,7 +253,6 @@
             });
         }
 
-        // Jab card par tap/click karenge toh agla slide aayega (Agar ek se zyada photos hain)
         function handleCardClick(cardIdx, totalSlides, productName) {
             if (totalSlides > 1) {
                 changeSlide(cardIdx, 1, totalSlides);
@@ -299,12 +299,14 @@
             renderProducts(filtered);
         }
 
-        function sendCustomComment(index, name, mediaInfo) {
+        function sendCustomComment(index, name) {
             const commentBox = document.getElementById(`comment-${index}`);
             const userComment = commentBox.value.trim();
-            let message = `Hi Silky Bazaar,\n\n*Product Name:* ${name}\n*Media Link:* ${mediaInfo}`;
+            let message = `Hi Silky Bazaar,\n\n*Product Name:* ${name}\n*Catalog Link:* ${websiteDomain}`;
             if (userComment !== "") message += `\n\n*Comment On this Product:* ${userComment}`;
-            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+            
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
         }
 
         function openFullscreen(type, mediaSrc, mediaTitle) {
