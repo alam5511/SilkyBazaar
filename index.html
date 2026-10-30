@@ -70,11 +70,15 @@
         .carousel-slide { width: 100%; height: 100%; display: none; position: relative; }
         .carousel-slide.active { display: block; }
         .carousel-slide img, .carousel-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        
+        /* Halka Soft Watermark (Product Focus) */
         .display-watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg);
-            font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: rgba(255, 255, 255, 0.28);
+            font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: rgba(212, 175, 55, 0.18);
             pointer-events: none; z-index: 15; white-space: nowrap; letter-spacing: 3px;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
+        
         .slide-counter { position: absolute; top: 12px; right: 12px; background: rgba(0, 0, 0, 0.65); color: #fcf6ba; border: 1px solid rgba(212, 175, 55, 0.4); padding: 4px 10px; border-radius: 12px; font-size: 11px; z-index: 20; }
         .fullscreen-btn { position: absolute; top: 12px; left: 12px; background: rgba(0, 0, 0, 0.65); color: #fcf6ba; border: 1px solid rgba(212, 175, 55, 0.4); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; z-index: 20; }
         .carousel-dots { position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%); display: flex; gap: 6px; z-index: 20; }
@@ -98,7 +102,7 @@
         .modal-download-btn {
             position: absolute; top: 15px; right: 15px; background: #d4af37; color: #000;
             width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 20px; z-index: 100000; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.8);
+            font-size: 20px; z-index: 100000; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.8); border: none;
         }
 
         .close-btn { position: absolute; top: 20px; left: 20px; color: #fff; font-size: 32px; font-weight: bold; cursor: pointer; z-index: 100000; background: rgba(0,0,0,0.5); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -308,21 +312,62 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        // Direct Download Function for Admin in Browser
-        async function downloadMedia(url) {
+        // Image par Watermark Stamp karke Download karne ka function
+        async function downloadMediaWithWatermark(url) {
             try {
-                const response = await fetch(url);
-                const blob = await response.blob();
-                const blobUrl = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = blobUrl;
-                a.download = url.split('/').pop().split('?')[0] || 'silky-bazaar-media.png';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(blobUrl);
+                const isVideo = url.toLowerCase().includes('.mp4');
+                if (isVideo) {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = 'silky-bazaar-video.mp4';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(blobUrl);
+                    return;
+                }
+
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.src = url;
+
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+
+                    // 1. Original Image Render
+                    ctx.drawImage(img, 0, 0);
+
+                    // 2. Soft & Elegant Gold Watermark Stamp
+                    ctx.save();
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(-25 * Math.PI / 180);
+
+                    const fontSize = Math.floor(canvas.width * 0.055);
+                    ctx.font = `bold ${fontSize}px Cinzel, Montserrat, sans-serif`;
+                    ctx.fillStyle = "rgba(212, 175, 55, 0.22)"; // Halka Gold Shade
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    
+                    ctx.fillText("SILKY BAZAAR", 0, 0);
+                    ctx.restore();
+
+                    // 3. Direct Gallery Save Trigger
+                    const dataUrl = canvas.toDataURL("image/png");
+                    const a = document.createElement('a');
+                    a.href = dataUrl;
+                    a.download = `silky-bazaar-${Date.now()}.png`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
             } catch (err) {
-                // Fallback agar fetch block ho jaye
                 window.open(url, '_blank');
             }
         }
@@ -334,7 +379,7 @@
             let downloadButtonHTML = "";
             if (!isApp) {
                 downloadButtonHTML = `
-                    <button onclick="downloadMedia('${mediaSrc}')" class="modal-download-btn" title="Gallery me Save karein">
+                    <button onclick="downloadMediaWithWatermark('${mediaSrc}')" class="modal-download-btn" title="Watermark ke saath save karein">
                         <i class="fa-solid fa-download"></i>
                     </button>
                 `;
