@@ -118,7 +118,7 @@
 </head>
 <body class="blur-protection" id="mainBody">
 
-    <!-- Admin Login Overlay (Sirf tabhi khulega jab URL me ?admin lagayenge ya aap kholege) -->
+    <!-- Admin Login Overlay -->
     <div id="admin-login-overlay">
         <div class="login-box">
             <div class="login-title">ADMIN ACCESS</div>
@@ -160,17 +160,18 @@
         const isAdminLoggedIn = localStorage.getItem("silky_admin_logged") === "true";
         const urlParams = new URLSearchParams(window.location.search);
 
-        // Agar URL me ?admin likha hai tabhi admin login popup aayega, warna customer bina kisi login ke direct website dekh payega!
+        // Sirf tabhi popup aayega jab URL me ?admin hoga aur aap logged in nahi hain
         if (!isApp && !isAdminLoggedIn && urlParams.has('admin')) {
             document.getElementById("admin-login-overlay").style.display = "flex";
         }
 
         function verifyAdmin() {
             const pass = document.getElementById("adminPass").value;
-            if (pass === "Silky@#8528") {
+            // Naya Password Yahan Set Kiya Gaya Hai
+            if (pass === "Silky143") {
                 localStorage.setItem("silky_admin_logged", "true");
                 document.getElementById("admin-login-overlay").style.display = "none";
-                window.location.href = window.location.pathname; // URL se ?admin hata kar page refresh karega
+                window.location.href = window.location.pathname;
             } else {
                 alert("Wrong password!");
             }
@@ -406,7 +407,7 @@
             document.getElementById("modalContainer").innerHTML = "";
         }
 
-        // Anti-Screenshot Protection for Customers (Blur Effect on Tab Switch or Screenshot attempt)
+        // Anti-Screenshot & Screen Recording Blur Feature for Customers
         if (!isApp && !isAdminLoggedIn) {
             document.addEventListener("visibilitychange", () => {
                 if (document.hidden) {
