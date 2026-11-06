@@ -11,6 +11,15 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: #080808; font-family: 'Montserrat', sans-serif; color: #ffffff; padding-bottom: 30px; }
 
+        /* Screenshot & Screen Recording Blur Protection */
+        @media print {
+            body { display: none; }
+        }
+        body {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         #admin-login-overlay {
             display: none;
             position: fixed;
@@ -69,9 +78,9 @@
         .media-box { width: 100%; aspect-ratio: 9 / 16; overflow: hidden; position: relative; background-color: #1a1a1a; cursor: pointer; }
         .carousel-slide { width: 100%; height: 100%; display: none; position: relative; }
         .carousel-slide.active { display: block; }
-        .carousel-slide img, .carousel-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .carousel-slide img, .carousel-slide video { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s ease; }
         
-        /* Halka Soft Watermark (Product Focus) */
+        /* Watermark */
         .display-watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg);
             font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: rgba(212, 175, 55, 0.18);
@@ -97,7 +106,7 @@
 
         .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.95); z-index: 99999; justify-content: center; align-items: center; }
         .modal-wrapper { position: relative; width: 90%; height: 90%; display: flex; justify-content: center; align-items: center; }
-        .modal-wrapper img, .modal-wrapper video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
+        .modal-wrapper img, .modal-wrapper video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; transition: filter 0.3s ease; }
         
         .modal-download-btn {
             position: absolute; top: 15px; right: 15px; background: #d4af37; color: #000;
@@ -152,12 +161,11 @@
 
     <script>
         const isApp = navigator.userAgent.includes("SilkyBazaarApp");
+        const isAdminLoggedIn = localStorage.getItem("silky_admin_logged") === "true";
 
-        if (!isApp) {
-            const isAdminLoggedIn = localStorage.getItem("silky_admin_logged");
-            if (isAdminLoggedIn !== "true") {
-                document.getElementById("admin-login-overlay").style.display = "flex";
-            }
+        // Agar App nahi hai aur Admin logged in nahi hai, toh login popup dikhega
+        if (!isApp && !isAdminLoggedIn) {
+            document.getElementById("admin-login-overlay").style.display = "flex";
         }
 
         function verifyAdmin() {
@@ -165,6 +173,7 @@
             if (pass === "Silky@#8528") {
                 localStorage.setItem("silky_admin_logged", "true");
                 document.getElementById("admin-login-overlay").style.display = "none";
+                location.reload(); // Page reload taaki download button turant dikhne lage
             } else {
                 alert("Wrong password!");
             }
@@ -312,7 +321,7 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        // Image par Watermark Stamp karke Download karne ka function
+        // Watermark ke sath download (Sirf Admin ke liye)
         async function downloadMediaWithWatermark(url) {
             try {
                 const isVideo = url.toLowerCase().includes('.mp4');
@@ -341,24 +350,21 @@
                     canvas.width = img.naturalWidth;
                     canvas.height = img.naturalHeight;
 
-                    // 1. Original Image Render
                     ctx.drawImage(img, 0, 0);
 
-                    // 2. Soft & Elegant Gold Watermark Stamp
                     ctx.save();
                     ctx.translate(canvas.width / 2, canvas.height / 2);
                     ctx.rotate(-25 * Math.PI / 180);
 
                     const fontSize = Math.floor(canvas.width * 0.055);
                     ctx.font = `bold ${fontSize}px Cinzel, Montserrat, sans-serif`;
-                    ctx.fillStyle = "rgba(212, 175, 55, 0.22)"; // Halka Gold Shade
+                    ctx.fillStyle = "rgba(212, 175, 55, 0.22)";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     
                     ctx.fillText("SILKY BAZAAR", 0, 0);
                     ctx.restore();
 
-                    // 3. Direct Gallery Save Trigger
                     const dataUrl = canvas.toDataURL("image/png");
                     const a = document.createElement('a');
                     a.href = dataUrl;
@@ -377,9 +383,10 @@
             const container = document.getElementById("modalContainer");
 
             let downloadButtonHTML = "";
-            if (!isApp) {
+            // Sirf tabhi download button dikhega jab Admin logged in ho ya App ho
+            if (isApp || isAdminLoggedIn) {
                 downloadButtonHTML = `
-                    <button onclick="downloadMediaWithWatermark('${mediaSrc}')" class="modal-download-btn" title="Watermark ke saath save karein">
+                    <button onclick="downloadMediaWithWatermark('${mediaSrc}')" class="modal-download-btn" title="Watermark ke sath save karein">
                         <i class="fa-solid fa-download"></i>
                     </button>
                 `;
@@ -402,6 +409,25 @@
         function closeFullscreen() {
             document.getElementById("mediaModal").style.display = "none";
             document.getElementById("modalContainer").innerHTML = "";
+        }
+
+        // Anti-Screenshot & Screen Recording Blur Feature for Customers
+        if (!isApp && !isAdminLoggedIn) {
+            document.addEventListener('keyup', (e) => {
+                if (e.key == 'PrintScreen') {
+                    navigator.clipboard.writeText('');
+                    alert('Screenshot is disabled for protection!');
+                }
+            });
+
+            // Visibility Change par screen blur karna (jab user screenshot ya screen record karne ki koshish kare)
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    document.body.style.filter = "blur(20px)";
+                } else {
+                    document.body.style.filter = "none";
+                }
+            });
         }
 
         renderProducts(products);
