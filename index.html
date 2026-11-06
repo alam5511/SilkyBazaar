@@ -11,13 +11,9 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background-color: #080808; font-family: 'Montserrat', sans-serif; color: #ffffff; padding-bottom: 30px; }
 
-        /* Screenshot & Screen Recording Blur Protection */
-        @media print {
-            body { display: none; }
-        }
-        body {
-            -webkit-user-select: none;
-            user-select: none;
+        /* Anti-Screenshot & Screen Recording Blur Effect for Customers */
+        .blur-protection {
+            transition: filter 0.3s ease;
         }
 
         #admin-login-overlay {
@@ -78,9 +74,8 @@
         .media-box { width: 100%; aspect-ratio: 9 / 16; overflow: hidden; position: relative; background-color: #1a1a1a; cursor: pointer; }
         .carousel-slide { width: 100%; height: 100%; display: none; position: relative; }
         .carousel-slide.active { display: block; }
-        .carousel-slide img, .carousel-slide video { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.3s ease; }
+        .carousel-slide img, .carousel-slide video { width: 100%; height: 100%; object-fit: cover; display: block; }
         
-        /* Watermark */
         .display-watermark {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-25deg);
             font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: rgba(212, 175, 55, 0.18);
@@ -106,7 +101,7 @@
 
         .fullscreen-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: rgba(0, 0, 0, 0.95); z-index: 99999; justify-content: center; align-items: center; }
         .modal-wrapper { position: relative; width: 90%; height: 90%; display: flex; justify-content: center; align-items: center; }
-        .modal-wrapper img, .modal-wrapper video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; transition: filter 0.3s ease; }
+        .modal-wrapper img, .modal-wrapper video { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 8px; }
         
         .modal-download-btn {
             position: absolute; top: 15px; right: 15px; background: #d4af37; color: #000;
@@ -121,8 +116,9 @@
         .footer-text { font-size: 11px; color: #777; }
     </style>
 </head>
-<body>
+<body class="blur-protection" id="mainBody">
 
+    <!-- Admin Login Overlay (Sirf tabhi khulega jab URL me ?admin lagayenge ya aap kholege) -->
     <div id="admin-login-overlay">
         <div class="login-box">
             <div class="login-title">ADMIN ACCESS</div>
@@ -162,9 +158,10 @@
     <script>
         const isApp = navigator.userAgent.includes("SilkyBazaarApp");
         const isAdminLoggedIn = localStorage.getItem("silky_admin_logged") === "true";
+        const urlParams = new URLSearchParams(window.location.search);
 
-        // Agar App nahi hai aur Admin logged in nahi hai, toh login popup dikhega
-        if (!isApp && !isAdminLoggedIn) {
+        // Agar URL me ?admin likha hai tabhi admin login popup aayega, warna customer bina kisi login ke direct website dekh payega!
+        if (!isApp && !isAdminLoggedIn && urlParams.has('admin')) {
             document.getElementById("admin-login-overlay").style.display = "flex";
         }
 
@@ -173,7 +170,7 @@
             if (pass === "Silky@#8528") {
                 localStorage.setItem("silky_admin_logged", "true");
                 document.getElementById("admin-login-overlay").style.display = "none";
-                location.reload(); // Page reload taaki download button turant dikhne lage
+                window.location.href = window.location.pathname; // URL se ?admin hata kar page refresh karega
             } else {
                 alert("Wrong password!");
             }
@@ -321,7 +318,6 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        // Watermark ke sath download (Sirf Admin ke liye)
         async function downloadMediaWithWatermark(url) {
             try {
                 const isVideo = url.toLowerCase().includes('.mp4');
@@ -383,7 +379,6 @@
             const container = document.getElementById("modalContainer");
 
             let downloadButtonHTML = "";
-            // Sirf tabhi download button dikhega jab Admin logged in ho ya App ho
             if (isApp || isAdminLoggedIn) {
                 downloadButtonHTML = `
                     <button onclick="downloadMediaWithWatermark('${mediaSrc}')" class="modal-download-btn" title="Watermark ke sath save karein">
@@ -411,22 +406,22 @@
             document.getElementById("modalContainer").innerHTML = "";
         }
 
-        // Anti-Screenshot & Screen Recording Blur Feature for Customers
+        // Anti-Screenshot Protection for Customers (Blur Effect on Tab Switch or Screenshot attempt)
         if (!isApp && !isAdminLoggedIn) {
-            document.addEventListener('keyup', (e) => {
-                if (e.key == 'PrintScreen') {
-                    navigator.clipboard.writeText('');
-                    alert('Screenshot is disabled for protection!');
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) {
+                    document.getElementById("mainBody").style.filter = "blur(25px)";
+                } else {
+                    document.getElementById("mainBody").style.filter = "none";
                 }
             });
 
-            // Visibility Change par screen blur karna (jab user screenshot ya screen record karne ki koshish kare)
-            document.addEventListener("visibilitychange", () => {
-                if (document.hidden) {
-                    document.body.style.filter = "blur(20px)";
-                } else {
-                    document.body.style.filter = "none";
-                }
+            window.addEventListener("blur", () => {
+                document.getElementById("mainBody").style.filter = "blur(25px)";
+            });
+
+            window.addEventListener("focus", () => {
+                document.getElementById("mainBody").style.filter = "none";
             });
         }
 
