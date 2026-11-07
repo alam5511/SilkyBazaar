@@ -9,9 +9,9 @@
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #080808; font-family: 'Montserrat', sans-serif; color: #ffffff; padding-bottom: 30px; }
+        body { background-color: #080808; font-family: 'Montserrat', sans-serif; color: #ffffff; padding-bottom: 30px; -webkit-user-select: none; user-select: none; }
 
-        /* Anti-Screenshot & Screen Recording Blur Effect for Customers */
+        /* Advanced Anti-Screenshot & Screen Recording Blur Effect */
         .blur-protection {
             transition: filter 0.3s ease;
         }
@@ -116,7 +116,7 @@
         .footer-text { font-size: 11px; color: #777; }
     </style>
 </head>
-<body class="blur-protection" id="mainBody">
+<body class="blur-protection" id="mainBody" oncontextmenu="return false;" ondragstart="return false;">
 
     <!-- Admin Login Overlay -->
     <div id="admin-login-overlay">
@@ -167,7 +167,7 @@
 
         function verifyAdmin() {
             const pass = document.getElementById("adminPass").value;
-            // Naya Password Yahan Set Kiya Gaya Hai
+            // Updated Admin Password
             if (pass === "Silky143") {
                 localStorage.setItem("silky_admin_logged", "true");
                 document.getElementById("admin-login-overlay").style.display = "none";
@@ -407,22 +407,30 @@
             document.getElementById("modalContainer").innerHTML = "";
         }
 
-        // Anti-Screenshot & Screen Recording Blur Feature for Customers
+        // Advanced Anti-Screenshot & Privacy Protection for Customers
         if (!isApp && !isAdminLoggedIn) {
             document.addEventListener("visibilitychange", () => {
                 if (document.hidden) {
-                    document.getElementById("mainBody").style.filter = "blur(25px)";
+                    document.getElementById("mainBody").style.filter = "blur(40px) brightness(0.2)";
                 } else {
                     document.getElementById("mainBody").style.filter = "none";
                 }
             });
 
             window.addEventListener("blur", () => {
-                document.getElementById("mainBody").style.filter = "blur(25px)";
+                document.getElementById("mainBody").style.filter = "blur(40px) brightness(0.2)";
             });
 
             window.addEventListener("focus", () => {
                 document.getElementById("mainBody").style.filter = "none";
+            });
+
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'PrintScreen' || (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'c' || e.key === 'p'))) {
+                    e.preventDefault();
+                    alert('Screenshots & Copying are restricted on Silky Bazaar!');
+                    return false;
+                }
             });
         }
 
