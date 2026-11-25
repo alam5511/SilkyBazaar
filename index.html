@@ -178,8 +178,7 @@
         const websiteDomain = "https://silkybazaar.in";
 
         const products = [
-
-    { name: "Orgenza Saree", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/1.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/1f.jpeg" ] },
+           { name: "Orgenza Saree", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/1.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/1f.jpeg" ] },
     { name: "Orgenza Saree", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/9.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/8.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/10.png" ] },
     { name: "Orgenza Saree", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/11.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/11f.jpeg" ] },
     { name: "Orgenza Saree", src: [ "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/2.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/3.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/4.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/5.png", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/2%2C3%2C4%2Cf2.jpeg", "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/2%20%2C%203%20%2C%204%20%2C%205%20f.jpeg" ] },
@@ -194,7 +193,6 @@
     { name: "Kora Kataan - Red - 1001", src: "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/Kora%20Kataan%20-%20Red%20-%201001.jpeg" },
     { name: "Kora Kataan - Soft Pink Rose Pink - 1003", src: "https://raw.githubusercontent.com/alam5511/SilkyBazaar/main/Kora%20Kataan%20-%20Soft%20Pink%20%20Rose%20Pink%20-%201003.jpeg" },
     { name: "Saree Collection New Link 3", src: "https://files.catbox.moe/qilrdk.png" }
-
         ];
 
         const catalogContainer = document.getElementById("catalog");
@@ -202,8 +200,7 @@
         function renderProducts(items) {
             catalogContainer.innerHTML = "";
             if (items.length === 0) {
-                catalogC
-                    ontainer.innerHTML = `<div class="no-results"> This name does not match </div>`;
+                catalogContainer.innerHTML = `<div class="no-results"> This name does not match </div>`;
                 return;
             }
 
